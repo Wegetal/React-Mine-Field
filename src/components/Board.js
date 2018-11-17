@@ -82,21 +82,25 @@ class Board extends React.Component {
     const { fields } = this.props;
 
     let gameStatus = fields.every(lines => {
-      return !lines.some(collumn => {
-        if (!collumn.isBomb) {
-          if (!!collumn.isHidden) {
-            return true;
+      if (!!lines) {
+        return !lines.some(collumn => {
+          if (!collumn.isBomb) {
+            if (!!collumn.isHidden) {
+              return true;
+            } else {
+              return false;
+            }
           } else {
-            return false;
+            if (!collumn.isMarked) {
+              return true;
+            } else {
+              return false;
+            }
           }
-        } else {
-          if (!collumn.isMarked) {
-            return true;
-          } else {
-            return false;
-          }
-        }
-      });
+        });
+      } else {
+        return false;
+      }
     });
 
     if (gameStatus) {
@@ -134,7 +138,7 @@ class Board extends React.Component {
   };
   render() {
     const { fields, updateFields } = this.props;
-    if (!!fields.length > 0) {
+    if (!!fields && fields.length > 0) {
       this.checkGameStatus();
     }
     return (
@@ -149,20 +153,21 @@ class Board extends React.Component {
           {!!fields &&
             fields.map((line, index) => (
               <Grid key={index} item>
-                {line.map((collumn, i) => (
-                  <Cell
-                    checkGameStatus={this.checkGameStatus}
-                    updateFields={updateFields}
-                    makeReload={this.makeReload}
-                    revealAll={this.revealAll}
-                    fields={fields}
-                    key={i}
-                    line={index}
-                    horizontal={i}
-                    collumn={collumn}
-                    revealBoard={this.revealBoard}
-                  />
-                ))}
+                {!!line &&
+                  line.map((collumn, i) => (
+                    <Cell
+                      checkGameStatus={this.checkGameStatus}
+                      updateFields={updateFields}
+                      makeReload={this.makeReload}
+                      revealAll={this.revealAll}
+                      fields={fields}
+                      key={i}
+                      line={index}
+                      horizontal={i}
+                      collumn={collumn}
+                      revealBoard={this.revealBoard}
+                    />
+                  ))}
               </Grid>
             ))}
         </Grid>
