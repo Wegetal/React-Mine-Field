@@ -40,8 +40,8 @@ class Cell extends React.Component {
     }
   };
   render() {
-    const { value, isBomb, isHidden, isMarked } = this.props.collumn;
-    return (
+    const { collumn } = this.props;
+    return !!collumn ? (
       <div
         style={{
           width: "30px",
@@ -54,9 +54,15 @@ class Cell extends React.Component {
         onClick={this.revealField}
         onContextMenu={this.markField}
       >
-        {!isHidden ? (!!isBomb ? "💣" : value) : !!isMarked ? "🚩" : null}
+        {!collumn.isHidden
+          ? !!collumn.isBomb
+            ? "💣"
+            : collumn.value
+          : !!collumn.isMarked
+          ? "🚩"
+          : null}
       </div>
-    );
+    ) : null;
   }
 }
 
